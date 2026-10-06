@@ -77,6 +77,9 @@ SP ẩn, cart/order.
 - Field `slug` tự sinh từ `name` (slugify + đảm bảo unique); `sellerId`/`slug` là server-owned.
 - Giá là số nguyên VNĐ (không thập phân). `stock=0` vẫn trả trong list nhưng FE hiển thị "Hết hàng" (R-05).
 - Seed **không** dùng `MONGODB_URI_PROD`; chỉ chạy trên DB dev/local. Không seed user/seller giả có mật khẩu.
+- **Điều kiện seed product:** phải có sẵn ít nhất 1 user `customer` (`isActive=true`) trong DB. Nếu chưa có,
+  `seed:sample` chỉ tạo category, bỏ qua product và ghi warning nhắc đăng ký customer rồi chạy lại — KHÔNG bịa
+  `sellerId` (tránh product mồ côi tham chiếu seller không tồn tại).
 - Ảnh mẫu là URL public hợp lệ (không phải Cloudinary của app) — chấp nhận trong scope rút gọn vì chưa có upload/validate ảnh (R-13 deferred).
 - Task lớn hơn 1–3 file vì schema/service/controller/DTO/seed gắn chặt một domain; chấp nhận.
 - Nguồn: `SPECIFICATIONS.md` R-05 (public browse) + R-04 (schema fields/index) · `docs/API_SPEC.md` · `docs/ERD.md`.

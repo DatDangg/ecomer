@@ -10,6 +10,7 @@ import { AdminSeedService } from './database/seed/admin-seed.service';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -29,6 +30,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     AuthModule,
     CategoriesModule,
+    ProductsModule,
     HealthModule,
   ],
   providers: [
