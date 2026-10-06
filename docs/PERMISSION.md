@@ -18,14 +18,14 @@
 
 ## Guard order (thứ tự middleware trên route)
 
-> Thứ tự quan trọng: auth → role → ownership → rate-limit → handler.
+> Thứ tự quan trọng. **Trạng thái wire thực tế:** L0 chỉ đăng ký `ThrottlerGuard` toàn cục (`APP_GUARD`). Các guard `JwtAuthGuard`/`OptionalJwtAuthGuard`/`RolesGuard` **đã được định nghĩa ở L0** nhưng chỉ **áp dụng ở route-level khi route tương ứng được thêm (L1+)**. Thứ tự hiệu lực khi mọi thứ được wire: throttle (global) → auth → role → ownership → handler.
 
-1. `JwtAuthGuard` / `OptionalJwtAuthGuard` — verify token, gắn `req.user` (thiếu/sai → 401). `JwtStrategy.validate` đọc `isActive` từ DB mỗi request (BR-AUTH-009) → user bị ban bị từ chối **ngay** (403) dù token còn hạn.
-2. `RolesGuard` + `@Roles(ADMIN)` — check role (thiếu quyền → 403). Dùng cho `/admin/*` và CRUD category.
-3. `assertOwnerOrAdmin()` ở service — BOLA/IDOR: tài nguyên phải thuộc `req.user` (hoặc admin) — `skills/security/bola-idor.md`.
+1. `ThrottlerGuard` (global `APP_GUARD`) — rate limit (mặc định 100 req/phút); nhóm `/auth/*` siết qua decorator `@Throttle` (10 req/phút/IP).
+2. `JwtAuthGuard` / `OptionalJwtAuthGuard` — verify token, gắn `req.user` (thiếu/sai → 401). `JwtStrategy.validate` đọc `isActive` từ DB mỗi request (BR-AUTH-009) → user bị ban bị từ chối **ngay** (403) dù token còn hạn.
+3. `RolesGuard` + `@Roles(ADMIN)` — check role (thiếu quyền → 403). Dùng cho `/admin/*` và CRUD category.
+4. `assertOwnerOrAdmin()` ở service — BOLA/IDOR: tài nguyên phải thuộc `req.user` (hoặc admin) — `skills/security/bola-idor.md`.
    - Endpoint **ghi** (`PATCH/DELETE /products/:id`, `PATCH /orders/:id/status`) trên tài nguyên có thật nhưng sai chủ → **403**.
    - Endpoint **đọc** theo "của tôi" (`/orders/my/:id`, `/orders/selling/:id`) lọc owner trong query → không phải của mình → **404** (không lộ tồn tại).
-4. `@nestjs/throttler` — throttle nhóm `/auth/*` (10 req/phút/IP).
 5. handler — `ValidationPipe({ whitelist, forbidNonWhitelisted, transform })` toàn cục (chống mass assignment: `role`, `isActive`, `sellerId`, `isBlocked`, `slug`, `blockReason` không nhận từ body).
 
 ## Route ↔ permission matrix

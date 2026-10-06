@@ -39,7 +39,7 @@ Repo layout (monorepo, 2 project độc lập, không workspace): `backend/` (Ne
 ## Features
 
 > Mỗi requirement `R-xx` ánh xạ tới FR trong `docs/BRD.md` + Epic/User Story trong `PRODUCT_BACKLOG_ROADMAP.md`.
-> Trạng thái: repo **chưa có code** → tất cả backend/frontend là `planned` (dựng mới), trừ các mục đánh dấu.
+> Trạng thái: **initial build đang chạy**. Layer 0 hoàn tất (nền `backend/` NestJS + `frontend/` Vite/React: bootstrap, DB + response contract, identity/JWT foundation, FE scaffold + data layer). Các module nghiệp vụ (auth endpoints, product, cart, order, payment, admin) build ở Layer 1+.
 
 ### R-01 — Auth & User (FR-001, FR-002 · EPIC-01 · Must-Have)
 - Đăng ký email + password (bcrypt), email unique; public register luôn `role = customer`.
@@ -179,7 +179,7 @@ Chi tiết field/enum: `project-ecommerce/05-database-erd.md`. Overview + index:
 - **JWT:** access TTL **15 phút**, refresh TTL **7 ngày**; refresh token lưu **hash SHA-256** trong `users` (1 token/user — đăng nhập thiết bị mới vô hiệu hóa token cũ).
 - `Authorization: Bearer <access_token>`; `JwtStrategy.validate` đọc `isActive` từ DB mỗi request → ban hiệu lực **ngay** (403) dù token còn hạn.
 - **Roles:** `customer` (public register mặc định; bán khi có `shopName`), `admin` (seed only). Guest không phải role. Seller không phải role riêng — xác định bằng `sellerId = user.id`.
-- **Guard order:** `JwtAuthGuard`/`OptionalJwtAuthGuard` → `RolesGuard` → `assertOwnerOrAdmin()` (ghi sai chủ 403; đọc "của tôi" sai chủ 404) → `@nestjs/throttler` → handler.
+- **Guard order:** `ThrottlerGuard` đã đăng ký toàn cục (`APP_GUARD`, chạy trước route guards). Chuỗi route-level `JwtAuthGuard`/`OptionalJwtAuthGuard` → `RolesGuard` → `assertOwnerOrAdmin()` (ghi sai chủ 403; đọc "của tôi" sai chủ 404) được wire dần ở Layer 1+ khi có route (nền guards đã có ở L0). `/auth/*` siết qua `@Throttle`.
 - **Hardening:** bcrypt; `ValidationPipe({ whitelist, forbidNonWhitelisted, transform })` toàn cục (chặn mass assignment `role/isActive/sellerId/isBlocked/slug/blockReason`); helmet; throttle `/auth/*`; CORS chỉ `FRONTEND_URL`; VNPay verify HMAC-SHA512 bắt buộc.
 
 ## Scalability Profile (OPTIONAL — chỉ khi user bật Scalability Option)

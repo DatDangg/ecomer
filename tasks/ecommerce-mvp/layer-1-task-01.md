@@ -11,6 +11,7 @@ Hoàn thiện `AuthModule`: `POST /auth/register` (email + password bcrypt, emai
 `role=customer`, không trả password), `POST /auth/login` (access 15m + refresh 7d + user), `POST /auth/refresh`
 (xác thực refresh token + hash SHA-256 trong DB, 1 token/user), `POST /auth/logout` (xoá refresh hash).
 Áp throttle 10 req/phút/IP cho `/auth/*`.
+**Prerequisite (từ phase review L0):** đăng ký runtime JWT — `AuthModule` import `JwtModule.registerAsync(buildJwtModuleOptions)`, `PassportModule`, provider `JwtStrategy` (đã có ở L0 task-04 nhưng chưa wire). Đăng ký `JwtAuthGuard` là `APP_GUARD` toàn cục (tôn trọng `@Public()`); `OptionalJwtAuthGuard` dùng cho route public-optional.
 
 ## Dependencies
 - task-04 Layer 0 (User schema + UsersService + JwtStrategy + guards + admin seed)
@@ -22,6 +23,7 @@ Hoàn thiện `AuthModule`: `POST /auth/register` (email + password bcrypt, emai
 - [ ] Refresh token sai/hết hạn → 401; login thiết bị mới vô hiệu hoá token cũ (1 token/user).
 - [ ] Logout xoá refresh hash; refresh sau logout → 401.
 - [ ] `isActive=false` → login 403 `Tài khoản đã bị khóa`; `/auth/*` bị throttle (429 khi vượt).
+- [ ] `JwtModule` + `PassportModule` + `JwtStrategy` được đăng ký runtime; `JwtAuthGuard` là `APP_GUARD` toàn cục (`@Public()` bypass); route bảo vệ không token → 401.
 - [ ] `api_lint` + `api_typecheck` + `test` PASS.
 
 ## DoD (Definition of Done)

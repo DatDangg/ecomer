@@ -63,7 +63,7 @@ otel_env: production
 > Mọi người (builder/reviewer) PHẢI dùng đúng lệnh đã cấu hình ở đây, filter theo package bị đụng nếu monorepo.
 > Nếu command là `null`/placeholder hoặc repo chưa có app code (`source_roots: []`) → ghi `skip, no app configured`.
 > KHÔNG tự suy ra `npm test`, `pnpm lint`, Prisma, package name, hay path `apps/` khi chưa cấu hình.
-> ⚠️ Backend/frontend **chưa scaffold** — các lệnh là đích đến, sẽ verify ở layer 0 (scaffold).
+> ✅ Backend/frontend **đã scaffold ở Layer 0** (`backend/` NestJS, `frontend/` Vite/React) — các lệnh verify ở trên đã chạy thực tế từ task layer-0-task-01/05 trở đi.
 
 ```yaml
 check_commands:

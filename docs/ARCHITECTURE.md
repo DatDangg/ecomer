@@ -121,12 +121,12 @@ frontend/src/
 HTTP request
   → CORS (chỉ FRONTEND_URL)
   → Global ValidationPipe { whitelist, forbidNonWhitelisted, transform }   # chống mass assignment
-  → Guard chain:
-        OptionalJwtAuthGuard | JwtAuthGuard
+  → Guard chain (định nghĩa từ L0; wire route-level dần ở L1+):
+        ThrottlerGuard (APP_GUARD toàn cục — đã wire; 100 req/phút mặc định, /auth/* siết qua @Throttle)
+        OptionalJwtAuthGuard | JwtAuthGuard (áp dụng per-route khi route thêm)
           └─ JwtStrategy.validate: verify token + đọc isActive từ DB (ban hiệu lực ngay)
         RolesGuard (@Roles(admin))
         ownership check ở service: assertOwnerOrAdmin()
-  → @Throttle (nhóm /auth/*)
   → Controller → Service (business logic, transaction) → Mongoose
   → ResponseInterceptor: bọc { success, data, message }
   → GlobalExceptionFilter: bọc { success: false, message, errors }
@@ -214,7 +214,7 @@ VNPay → Return/IPN URL public của Render
 - MongoDB phải là replica set (Atlas M0 hoặc single-node local) cho transaction.
 - `09-environment-setup.md` có đoạn nói "không bắt buộc transaction" — **trái** với BR-CHK-010/05/10; đang áp dụng transaction.
 - VNPay chạy localhost không nhận IPN → dựa vào Return hoặc ngrok.
-- Repo hiện **chưa có app code** (`docs/generated/inventory.md` = 0 file); kiến trúc này là target-state từ spec.
+- Repo **đã có app code nền (Layer 0)**: `backend/` (NestJS bootstrap, Mongoose connection + replica-set guard, response contract, user/JWT foundation, admin seed) và `frontend/` (Vite + React + Tailwind + shadcn/ui, tokens, layout shells, axios data layer). Các module nghiệp vụ (auth endpoints, product, cart, order, payment, admin) đang được build ở Layer 1+. `docs/generated/inventory.md` vẫn có thể hiển thị 0 file vì `docs_inventory` command chưa cấu hình — chạy lại khi cần.
 
 ---
 

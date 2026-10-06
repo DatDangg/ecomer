@@ -6,7 +6,7 @@
 ## Source of truth
 
 1. **Schema files** — NestJS Mongoose schemas trong `src/modules/**/schemas/` (`*.schema.ts`) — xem `source_roots` / `.context/project-config.md`.
-   _Hiện repo chưa có app code (`docs/generated/inventory.md` = 0 file)._
+   _Layer 0 có nền `backend/` (Mongoose connection) + `User` schema; các schema nghiệp vụ (product, cart, checkout, order, payment) build ở Layer 2+._
 2. **Contract chi tiết** — `project-ecommerce/05-database-erd.md` (schema đầy đủ, index, quy ước cập nhật stock).
 3. **Generated inventory** — `docs/generated/` (chạy lại, không sửa tay).
 

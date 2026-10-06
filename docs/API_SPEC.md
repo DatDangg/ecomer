@@ -6,7 +6,7 @@
 ## Source of truth (theo thứ tự ưu tiên)
 
 1. **Code thật** — route/controller/validation trong `source_roots` (xem `.context/project-config.md`).
-   _Hiện repo chưa có app code (`docs/generated/inventory.md` = 0 file)._
+   _Layer 0 đã scaffold `backend/` (NestJS) + `frontend/` (Vite/React); các endpoint nghiệp vụ build dần ở Layer 1+ (auth, product, cart, order, payment, admin)._
 2. **Contract chi tiết** — `project-ecommerce/06-api-contract.md` (request/response mẫu, query params, lỗi).
 3. **Shared contract types** — `src/shared/types/api.ts` (client & server cùng import). _Chưa tồn tại._
 4. **Generated inventory** — `docs/generated/` (tạo bằng `check_commands.docs_inventory`; chỉ chạy lại, không sửa tay).

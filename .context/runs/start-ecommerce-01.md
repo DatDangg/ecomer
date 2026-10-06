@@ -5,9 +5,9 @@
 ```yaml
 workItem: start/ecommerce
 phaseTask: layer-0-task-06
-step: reviewer
-status: running
-attempt: 3
+step: layer0_done
+status: awaiting
+phaseTask: layer-0
 interrupted: false
 updatedAt: 2026-10-06T00:00:00+07:00
 filesTouched:
@@ -33,12 +33,12 @@ filesNew:
   - skills/react-nodejs/design-tokens.md
   - .context/design-spec.md
 evidence:
-  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-task-06-round-4-review.md
+  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-phase-review-round-4-review.md
   round: 4
   verdict: null
-next: "reviewer round 4 task-06 (dispatch-time interceptor guard + test)."
-approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: pending}]
-loopSignal: repeated:reviewer-session-race
+next: "⏸ Layer 0 checkpoint — chờ user approve để unlock Layer 1. Residual: spec-validator lặp finding doc-wording guard-order (loopSignal) — code tasks đều PASS."
+approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: true}, {gate: layer_0_done, at: "2026-10-06", ok: pending}]
+loopSignal: repeated:spec-validator-doc-guard-order
 batchQueue: []
 ```
 
