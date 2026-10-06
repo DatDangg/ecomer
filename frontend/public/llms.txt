@@ -1,0 +1,12 @@
+# Chợ Việt
+
+> Sàn thương mại điện tử đa người bán cho người mua, người bán và quản trị viên. Giao diện tiếng Việt, thanh toán VNPay.
+
+## Trang công khai
+
+- [Trang chủ](https://REPLACE_AT_DEPLOY/): Khám phá sản phẩm và danh mục.
+- [Sản phẩm](https://REPLACE_AT_DEPLOY/products): Danh sách sản phẩm đang bán.
+
+## Ghi chú
+
+- `REPLACE_AT_DEPLOY`: cập nhật domain thật khi deploy. Đây là scaffold layer 0; route và nội dung công khai sẽ được hoàn thiện ở các layer sau.

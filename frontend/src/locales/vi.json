@@ -1,0 +1,48 @@
+{
+  "app": {
+    "name": "Chợ Việt"
+  },
+  "common": {
+    "skipToContent": "Bỏ qua tới nội dung chính",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu",
+    "close": "Đóng",
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Tìm sản phẩm, gian hàng",
+    "comingSoon": "Nội dung của màn hình này sẽ được hoàn thiện ở bước tiếp theo."
+  },
+  "nav": {
+    "primary": "Điều hướng chính",
+    "accountSection": "Khu vực tài khoản",
+    "sellerSection": "Khu vực người bán",
+    "adminSection": "Khu vực quản trị",
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "cart": "Giỏ hàng",
+    "account": "Tài khoản",
+    "orders": "Đơn mua",
+    "profile": "Hồ sơ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
+  },
+  "seller": {
+    "nav": {
+      "overview": "Tổng quan",
+      "products": "Sản phẩm",
+      "orders": "Đơn bán",
+      "setup": "Thiết lập gian hàng"
+    }
+  },
+  "admin": {
+    "nav": {
+      "overview": "Tổng quan",
+      "users": "Người dùng",
+      "products": "Sản phẩm",
+      "categories": "Danh mục",
+      "orders": "Đơn hàng"
+    }
+  },
+  "footer": {
+    "tagline": "Sàn thương mại đa người bán cho người mua, người bán và quản trị viên."
+  }
+}

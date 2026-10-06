@@ -1,0 +1,6 @@
+# Chợ Việt — scaffold layer 0.
+# REPLACE_AT_DEPLOY: thay https://REPLACE_AT_DEPLOY bằng domain thật khi deploy.
+User-agent: *
+Allow: /
+
+Sitemap: https://REPLACE_AT_DEPLOY/sitemap.xml
