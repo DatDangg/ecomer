@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { AdminSeedService } from './database/seed/admin-seed.service';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { UsersModule } from './modules/users/users.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    CategoriesModule,
     HealthModule,
   ],
   providers: [
