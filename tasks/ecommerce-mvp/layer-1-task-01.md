@@ -17,21 +17,27 @@ Hoàn thiện `AuthModule`: `POST /auth/register` (email + password bcrypt, emai
 - task-04 Layer 0 (User schema + UsersService + JwtStrategy + guards + admin seed)
 
 ## Acceptance Criteria
-- [ ] Register 201, response không chứa `password`/`passwordHash`.
-- [ ] Email trùng → 409; sai password login → 401.
-- [ ] Login trả đúng `{ user, accessToken, refreshToken }`; access 15m, refresh 7d.
-- [ ] Refresh token sai/hết hạn → 401; login thiết bị mới vô hiệu hoá token cũ (1 token/user).
-- [ ] Logout xoá refresh hash; refresh sau logout → 401.
-- [ ] `isActive=false` → login 403 `Tài khoản đã bị khóa`; `/auth/*` bị throttle (429 khi vượt).
-- [ ] `JwtModule` + `PassportModule` + `JwtStrategy` được đăng ký runtime; `JwtAuthGuard` là `APP_GUARD` toàn cục (`@Public()` bypass); route bảo vệ không token → 401.
-- [ ] `api_lint` + `api_typecheck` + `test` PASS.
+- [x] Register 201, response không chứa `password`/`passwordHash`.
+- [x] Email trùng → 409; sai password login → 401.
+- [x] Login trả đúng `{ user, accessToken, refreshToken }`; access 15m, refresh 7d.
+- [x] Refresh token sai/hết hạn → 401; login thiết bị mới vô hiệu hoá token cũ (1 token/user).
+- [x] Logout xoá refresh hash; refresh sau logout → 401.
+- [x] `isActive=false` → login 403 `Tài khoản đã bị khóa`; `/auth/*` bị throttle (429 khi vượt).
+- [x] `JwtModule` + `PassportModule` + `JwtStrategy` được đăng ký runtime; `JwtAuthGuard` là `APP_GUARD` toàn cục (`@Public()` bypass); route bảo vệ không token → 401.
+- [x] `api_lint` + `api_typecheck` + `test` PASS.
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests added + pass (register/login/refresh/logout + 409/401/403)
-- [ ] Check commands pass (theo `.context/project-config.md`)
-- [ ] Reviewer độc lập PASS
-- [ ] committed
+- [x] Code written (chỉ trong scope)
+- [x] Tests added + pass (register/login/refresh/logout + 409/401/403)
+- [x] Check commands pass (theo `.context/project-config.md`)
+- [x] Reviewer độc lập PASS (round 4)
+- [x] committed
+
+## Close-out (2026-10-06)
+- **Reviewer:** PASS round 4 (STRICT). R1 [MAJOR] bcrypt 72-byte vs char-length → `@MaxUtf8Bytes(72)`; R3 [MAJOR] race đăng ký trùng email → 500 → map Mongo `code 11000` → 409.
+- **Verify:** `npm --prefix backend run lint` PASS · `tsc --noEmit` PASS · `npm --prefix backend run test` PASS (24 suites / 131 tests).
+- **Doc impact:** reconciled `docs/PERMISSION.md` + `docs/ARCHITECTURE.md` (global `JwtAuthGuard` now wired, `@Public()` bypass).
+- **Residual:** R3 [MINOR] `createUserStore()` helper >50 dòng (deferred); login path/admin seed chưa áp byte-limit; live Mongo concurrency chưa exercise.
 
 ## Verification Plan
 - Commands:

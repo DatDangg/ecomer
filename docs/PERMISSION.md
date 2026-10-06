@@ -18,7 +18,7 @@
 
 ## Guard order (thứ tự middleware trên route)
 
-> Thứ tự quan trọng. **Trạng thái wire thực tế:** L0 chỉ đăng ký `ThrottlerGuard` toàn cục (`APP_GUARD`). Các guard `JwtAuthGuard`/`OptionalJwtAuthGuard`/`RolesGuard` **đã được định nghĩa ở L0** nhưng chỉ **áp dụng ở route-level khi route tương ứng được thêm (L1+)**. Thứ tự hiệu lực khi mọi thứ được wire: throttle (global) → auth → role → ownership → handler.
+> Thứ tự quan trọng. **Trạng thái wire thực tế:** `ThrottlerGuard` **và** `JwtAuthGuard` đăng ký toàn cục (`APP_GUARD`) — `JwtAuthGuard` wire ở L1 task-01, tôn trọng `@Public()` (route public bypass). `OptionalJwtAuthGuard` dùng ở route public-optional; `RolesGuard`/ownership **áp dụng route-level khi route tương ứng được thêm (L1+)** (chưa wire global). Thứ tự hiệu lực hiện tại: throttle (global) → auth (global, trừ `@Public()`) → role → ownership → handler.
 
 1. `ThrottlerGuard` (global `APP_GUARD`) — rate limit (mặc định 100 req/phút); nhóm `/auth/*` siết qua decorator `@Throttle` (10 req/phút/IP).
 2. `JwtAuthGuard` / `OptionalJwtAuthGuard` — verify token, gắn `req.user` (thiếu/sai → 401). `JwtStrategy.validate` đọc `isActive` từ DB mỗi request (BR-AUTH-009) → user bị ban bị từ chối **ngay** (403) dù token còn hạn.

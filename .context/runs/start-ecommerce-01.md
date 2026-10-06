@@ -3,41 +3,33 @@
 > Artifact trạng thái để **resume cross-session**. **Primary ghi file này; subagent KHÔNG ghi.**
 
 ```yaml
-workItem: start/ecommerce
-phaseTask: layer-0-task-06
-step: layer0_done
-status: awaiting
-phaseTask: layer-0
+workItem: feature/ecommerce-mvp
+phaseTask: layer-1-task-01
+step: reviewer
+status: running
 interrupted: false
-updatedAt: 2026-10-06T00:00:00+07:00
+updatedAt: 2026-10-06T14:40:00+07:00
 filesTouched:
-  - BRIEF.md
-  - docs/API_SPEC.md
-  - docs/BRD.md
-  - docs/DESIGN.md
-  - docs/ERD.md
-  - docs/INDEX.md
-  - docs/PERMISSION.md
+  - backend/src/app.module.ts
+  - backend/src/health/health.controller.ts
+  - backend/test/setup-test-env.ts
 filesNew:
-  - PRODUCT_BACKLOG_ROADMAP.md
-  - docs/ARCHITECTURE.md
-  - docs/PRD.md
-  - docs/USER_FLOW.md
-  - project-ecommerce/
-  - SPECIFICATIONS.md
-  - spec/updates/2026-10-06-docs-first-bootstrap.md
-  - spec/test-scope/current.json
-  - .context/project-config.md
-  - .context/brainstorm-log.md
-  - docs/specs/2026-10-06-ecommerce-mvp-design.md
-  - skills/react-nodejs/design-tokens.md
-  - .context/design-spec.md
+  - backend/src/modules/auth/auth.controller.ts
+  - backend/src/modules/auth/auth.service.ts
+  - backend/src/modules/auth/auth.module.ts
+  - backend/src/modules/auth/auth.service.spec.ts
+  - backend/src/modules/auth/auth.integration.spec.ts
+  - backend/src/modules/auth/auth-throttle.spec.ts
+  - backend/src/modules/auth/dto/register.dto.ts
+  - backend/src/modules/auth/dto/login.dto.ts
+  - backend/src/modules/auth/dto/refresh.dto.ts
 evidence:
-  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-phase-review-round-4-review.md
+  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-1-task-01-round-4-review.md
   round: 4
   verdict: null
-next: "⏸ Layer 0 checkpoint — chờ user approve để unlock Layer 1. Residual: spec-validator lặp finding doc-wording guard-order (loopSignal) — code tasks đều PASS."
-approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: true}, {gate: layer_0_done, at: "2026-10-06", ok: pending}]
+  verify: "round3 FAIL [MAJOR] race đăng ký trùng email → 500 thay vì 409 → fixed: map Mongo code 11000 → ConflictException + regression test · primary verify lint PASS · tsc PASS · test 131/131 PASS. Reviewer subagent bị chặn shell."
+next: "Reviewer round 4 — chạy đúng 3 lệnh verify (allow-listed); nếu shell vẫn bị chặn, đánh giá code-review + evidence primary; xác nhận đóng MAJOR byte-length (r1) và race 409 (r3), chốt PASS/FAIL."
+approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: true}, {gate: layer_0_done, at: "2026-10-06", ok: true}]
 loopSignal: repeated:spec-validator-doc-guard-order
 batchQueue: []
 ```

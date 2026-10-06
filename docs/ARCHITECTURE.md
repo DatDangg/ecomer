@@ -121,11 +121,11 @@ frontend/src/
 HTTP request
   → CORS (chỉ FRONTEND_URL)
   → Global ValidationPipe { whitelist, forbidNonWhitelisted, transform }   # chống mass assignment
-  → Guard chain (định nghĩa từ L0; wire route-level dần ở L1+):
-        ThrottlerGuard (APP_GUARD toàn cục — đã wire; 100 req/phút mặc định, /auth/* siết qua @Throttle)
-        OptionalJwtAuthGuard | JwtAuthGuard (áp dụng per-route khi route thêm)
+  → Guard chain (global APP_GUARD: Throttler + JWT; role/ownership wire route-level dần ở L1+):
+        ThrottlerGuard (APP_GUARD toàn cục — 100 req/phút mặc định, /auth/* siết qua @Throttle)
+        JwtAuthGuard (APP_GUARD toàn cục từ L1 task-01; @Public() bypass) | OptionalJwtAuthGuard (route public-optional)
           └─ JwtStrategy.validate: verify token + đọc isActive từ DB (ban hiệu lực ngay)
-        RolesGuard (@Roles(admin))
+        RolesGuard (@Roles(admin)) — route-level khi route thêm
         ownership check ở service: assertOwnerOrAdmin()
   → Controller → Service (business logic, transaction) → Mongoose
   → ResponseInterceptor: bọc { success, data, message }
