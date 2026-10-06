@@ -4,6 +4,12 @@ export interface AppConfiguration {
   frontendUrl: string;
   mongodbUri: string;
   mongoServerSelectionTimeoutMs: number;
+  jwtSecret: string;
+  jwtRefreshSecret: string;
+  jwtAccessTtl: string;
+  jwtRefreshTtl: string;
+  adminEmail: string;
+  adminPassword: string;
 }
 
 /**
@@ -19,4 +25,12 @@ export default (): AppConfiguration => ({
     process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS ?? '5000',
     10,
   ),
+  // Secrets stay empty until configured; consumers fail fast instead of
+  // falling back to a hardcoded value. TTLs are non-secret and have defaults.
+  jwtSecret: process.env.JWT_SECRET ?? '',
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET ?? '',
+  jwtAccessTtl: process.env.JWT_ACCESS_TTL ?? '15m',
+  jwtRefreshTtl: process.env.JWT_REFRESH_TTL ?? '7d',
+  adminEmail: process.env.ADMIN_EMAIL ?? '',
+  adminPassword: process.env.ADMIN_PASSWORD ?? '',
 });

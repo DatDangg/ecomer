@@ -5,7 +5,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import configuration from './config/configuration';
 import { validate } from './config/env.validation';
 import { DatabaseModule } from './database/database.module';
+import { AdminSeedService } from './database/seed/admin-seed.service';
 import { HealthModule } from './health/health.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { HealthModule } from './health/health.module';
       },
     ]),
     DatabaseModule,
+    UsersModule,
     HealthModule,
   ],
   providers: [
@@ -28,6 +31,7 @@ import { HealthModule } from './health/health.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    AdminSeedService,
   ],
 })
 export class AppModule {}

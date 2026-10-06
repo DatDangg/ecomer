@@ -4,10 +4,10 @@
 
 ```yaml
 workItem: start/ecommerce
-phaseTask: layer-0-task-03
+phaseTask: layer-0-task-04
 step: reviewer
 status: running
-attempt: 1
+attempt: 2
 interrupted: false
 updatedAt: 2026-10-06T00:00:00+07:00
 filesTouched:
@@ -33,10 +33,10 @@ filesNew:
   - skills/react-nodejs/design-tokens.md
   - .context/design-spec.md
 evidence:
-  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-task-03-round-2-review.md
-  round: 2
+  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-task-04-round-3-review.md
+  round: 3
   verdict: null
-next: "reviewer round 2 task-03."
+next: "reviewer round 3 task-04 (empty-header fix)."
 approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: pending}]
 loopSignal: none
 batchQueue: []
