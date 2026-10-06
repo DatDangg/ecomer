@@ -6,9 +6,9 @@
 workItem: feature/ecommerce-mvp
 phaseTask: initial-build-handoff
 step: spec-publisher
-status: running
+status: awaiting
 interrupted: false
-updatedAt: 2026-10-07T02:20:00+07:00
+updatedAt: 2026-10-07T02:30:00+07:00
 attempt: 0
 batch: "L2-01 ✅ → L2-02 ✅ → L2 phase-review PASS ✅ → L3-01 smoke test"
 batch: "run-through to basic flow (user approved): L1-03 ✅ → L1-04 ✅ → L1-05 ✅ → phase-review PASS ✅ → L2-01 → L2-02 → L3-01"
@@ -38,7 +38,8 @@ evidence:
   l1t05: "PASS STRICT r1 — align GET /products/:id (nested category/seller, bỏ isBlocked public) + test stock=0; 37 suites/248 tests; chưa commit."
   phaseReviewR1: "FAIL — gap contract product detail (unlock Layer 2 blocked). Report: .context/review-reports/feature-ecommerce-mvp-phase-1-round-1-review.md"
   phaseReviewR2: "PASS — Layer 1 complete, Layer 2 unlock. Report: .context/review-reports/feature-ecommerce-mvp-phase-1-round-2-review.md"
-next: "Layer 1 DONE (commit 3c25ca9). Bắt đầu Layer 2: L2-01 FE Auth (builder→reviewer→commit) → L2-02 FE product list/detail → Layer 2 phase review → L3-01 smoke test."
+initialBuild: "DONE (MVP cơ bản: auth + duyệt sản phẩm). Layer 1/2/3 phase review PASS. Test-scope published scopeVersion 2 (commit de09ba3). spec_version 1.0.0 unchanged."
+next: "Initial build xong. Việc còn lại là các capability deferred (seller CRUD, upload, cart, order/checkout/VNPay, admin, deploy) → đi qua `/change`. Live smoke (seed:sample + BE + bash backend/scripts/smoke-basic-flow.sh) chạy tay trên dev khi cần."
 approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: true}, {gate: layer_0_done, at: "2026-10-06", ok: true}]
 loopSignal: repeated:spec-validator-doc-guard-order
 batchQueue: []
