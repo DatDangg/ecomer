@@ -13,8 +13,51 @@
 
 ---
 
+## 🛒 Ecommerce Team Project
+
+Monorepo gồm **2 project độc lập** (không dùng pnpm workspace):
+
+| Thư mục | Stack | Package manager |
+|---------|-------|-----------------|
+| `backend/` | NestJS + Mongoose + MongoDB | `npm` |
+| `frontend/` | React 18 + Vite + TypeScript | `pnpm` |
+
+**Chạy nhanh:**
+
+```bash
+# Backend
+npm --prefix backend install
+cp backend/.env.example backend/.env     # điền giá trị thật (xem docs/RUNBOOK.md §3; credentials: project-ecommerce/09-environment-setup.md)
+npm --prefix backend run start:dev       # API: http://localhost:3000/api/v1
+
+# Frontend
+pnpm --dir frontend install
+cp frontend/.env.example frontend/.env
+pnpm --dir frontend run dev              # http://localhost:5173
+```
+
+**Verify commands** (nguồn: `.context/project-config.md`):
+
+```bash
+npm --prefix backend run lint
+npm --prefix backend exec -- tsc --noEmit -p backend/tsconfig.json
+npm --prefix backend run test
+pnpm --dir frontend run lint
+pnpm --dir frontend exec tsc --noEmit
+```
+
+> 📖 Hướng dẫn đầy đủ (cài đặt, MongoDB replica set, deploy): **[`docs/RUNBOOK.md`](docs/RUNBOOK.md)**.
+> 🔴 **Transaction BẮT BUỘC replica set** (BR-CHK-010; checkout/rollback dùng `session.withTransaction`) —
+> dựng local theo **[`docs/MONGO_LOCAL_REPLICA_SET.md`](docs/MONGO_LOCAL_REPLICA_SET.md)**.
+> Nguồn canonical: `docs/ARCHITECTURE.md` §5 (Data Architecture) + §10 (Known Constraints), `docs/ERD.md`.
+> ⚠️ `project-ecommerce/09-environment-setup.md` mục "Lưu ý về MongoDB" **đã lỗi thời** ở điểm nói transaction
+> không bắt buộc — chỉ dùng doc đó cho danh sách env/credentials, không dùng để kết luận về replica set.
+
+---
+
 ## 📋 Table of Contents
 
+- [🛒 Ecommerce Team Project](#-ecommerce-team-project)
 - [Getting Started](#getting-started)
 - [Overview](#overview)
 - [Architecture](#architecture)

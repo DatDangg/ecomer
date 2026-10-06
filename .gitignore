@@ -1,6 +1,28 @@
+# ── Environment (never commit real secrets) ──
 .env
 .env.local
+.env.*.local
+
+# Keep env templates tracked (explicit — the patterns above must not catch them)
+!.env.example
+!.env.*.example
+
+# ── Dependencies ──
 node_modules/
+
+# ── Build output / artifacts ──
 dist/
 build/
+out/
+coverage/
+*.tsbuildinfo
+
+# ── Logs ──
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# ── OS / editor ──
 .DS_Store
+Thumbs.db

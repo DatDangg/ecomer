@@ -4,7 +4,7 @@
 
 ```yaml
 workItem: start/ecommerce
-phaseTask: layer-0-task-02
+phaseTask: layer-0-task-03
 step: reviewer
 status: running
 attempt: 1
@@ -33,10 +33,10 @@ filesNew:
   - skills/react-nodejs/design-tokens.md
   - .context/design-spec.md
 evidence:
-  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-task-02-round-2-review.md
+  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-0-task-03-round-2-review.md
   round: 2
   verdict: null
-next: "reviewer round 2 task-02."
+next: "reviewer round 2 task-03."
 approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: pending}]
 loopSignal: none
 batchQueue: []

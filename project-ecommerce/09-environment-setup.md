@@ -1,5 +1,10 @@
 # 09 — Environment Setup
 
+> ⚠️ **Superseded note (2026-10-06):** mục **"Lưu ý về MongoDB"** (bên dưới) nói transaction/replica set
+> "không bắt buộc" là **đã lỗi thời**. Theo **BR-CHK-010** + `docs/ARCHITECTURE.md` §5/§10: transaction
+> **BẮT BUỘC** → MongoDB **phải là replica set**. Dựng local theo `docs/MONGO_LOCAL_REPLICA_SET.md`.
+> Phần còn lại của tài liệu (danh sách env, cách lấy credentials) vẫn dùng được.
+
 ## Yêu cầu cài đặt
 
 | Công cụ | Version tối thiểu | Ghi chú                         |
@@ -142,6 +147,9 @@ app.enableCors({
 ## Lưu ý về MongoDB
 
 Việc trừ / hoàn stock dùng **cập nhật nguyên tử có điều kiện** (`updateOne` với `stock: { $gte: qty }`) nên **không bắt buộc** replica set / transaction. Nếu team muốn dùng `session.withTransaction()` thì cần MongoDB Atlas hoặc replica set local.
+
+> ⚠️ **Đã lỗi thời (superseded):** theo **BR-CHK-010** + `docs/ARCHITECTURE.md` §5/§10, transaction
+> **BẮT BUỘC** → MongoDB **phải là replica set**. Hướng dẫn dựng local: `docs/MONGO_LOCAL_REPLICA_SET.md`.
 
 ---
 
