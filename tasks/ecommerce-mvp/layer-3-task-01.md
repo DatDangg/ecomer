@@ -70,3 +70,13 @@ Không thêm tính năng mới ngoài smoke/build; nếu smoke phát hiện bug 
 - Live smoke script **không** commit secret; đọc `VITE_API_URL`/base URL qua biến môi trường hoặc mặc định `http://localhost:3000/api/v1`.
 - Đây là task kiểm thử cuối của MVP cơ bản; sau khi PASS + user duyệt sẽ chạy bước bàn giao test-scope (spec-publisher) khi kết thúc initial build.
 - Nguồn: `SPECIFICATIONS.md` R-01, R-05 · `.agent/FEATURE_WORKFLOW.md` (verification) · `.context/project-config.md`.
+
+## Verification Evidence (primary reconcile, 2026-10-07)
+- `npm --prefix backend run lint` → PASS (0 errors)
+- `npm --prefix backend exec -- tsc --noEmit -p backend/tsconfig.json` → PASS
+- `npm --prefix backend run test` → PASS, 38 suites / 256 tests (gồm `src/smoke/basic-flow.smoke.spec.ts`)
+- `npm --prefix backend run build` → PASS, `backend/dist/` emitted
+- `pnpm --dir frontend run lint` → PASS (2 pre-existing warnings ngoài diff)
+- `pnpm --dir frontend exec tsc --noEmit` → PASS
+- `pnpm --dir frontend run build` → PASS, `frontend/dist/` emitted (index.html + assets, llms.txt/robots.txt/sitemap.xml)
+- Live smoke script chưa chạy trên dev thật (không có Mongo/BE trong môi trường) — residual; đã validate bằng mock server.
