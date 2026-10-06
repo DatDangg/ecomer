@@ -4,11 +4,11 @@
 
 ```yaml
 workItem: feature/ecommerce-mvp
-phaseTask: layer-1-task-01
-step: reviewer
-status: running
+phaseTask: replan-mvp-basic
+step: graph
+status: awaiting
 interrupted: false
-updatedAt: 2026-10-06T14:40:00+07:00
+updatedAt: 2026-10-06T16:30:00+07:00
 filesTouched:
   - backend/src/app.module.ts
   - backend/src/health/health.controller.ts
@@ -24,11 +24,9 @@ filesNew:
   - backend/src/modules/auth/dto/login.dto.ts
   - backend/src/modules/auth/dto/refresh.dto.ts
 evidence:
-  reportPath: .context/review-reports/feature-ecommerce-mvp-layer-1-task-01-round-4-review.md
-  round: 4
-  verdict: null
-  verify: "round3 FAIL [MAJOR] race đăng ký trùng email → 500 thay vì 409 → fixed: map Mongo code 11000 → ConflictException + regression test · primary verify lint PASS · tsc PASS · test 131/131 PASS. Reviewer subagent bị chặn shell."
-next: "Reviewer round 4 — chạy đúng 3 lệnh verify (allow-listed); nếu shell vẫn bị chặn, đánh giá code-review + evidence primary; xác nhận đóng MAJOR byte-length (r1) và race 409 (r3), chốt PASS/FAIL."
+  replan: "Plan gọn 3 layer materialized: L1-04 (Product schema+seed+public browse) MỚI; L2-01/02 (FE auth, FE product) MỚI; L3-01 (smoke test) MỚI; 19 task cũ deferred → tasks/ecommerce-mvp/archive/; progress.json totalLayers=3/currentLayer=1/completedTasks + layer-1/task-01; layer-plan.html cập nhật (archify unavailable → best-effort)."
+  lastTask: "layer-1-task-01 Auth PASS STRICT round 4, commit b985bbf"
+next: "Resume layer-1-task-02 (User/Shop API) builder → reviewer → commit. Kế đó L1-03 Category → L1-04 Product(seed+public browse) → hết Layer 1 → spec-validator phase review → checkpoint."
 approvals: [{gate: design_tokens, at: "2026-10-06", ok: true}, {gate: layer_plan, at: "2026-10-06", ok: true}, {gate: layer_0_done, at: "2026-10-06", ok: true}]
 loopSignal: repeated:spec-validator-doc-guard-order
 batchQueue: []
