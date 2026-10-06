@@ -1,6 +1,19 @@
 {
-  "mode": "maintenance",
-  "activeWorkItem": null,
-  "features": [],
-  "bugs": []
+  "mode": "initial-build",
+  "activeWorkItem": {
+    "type": "feature",
+    "slug": "ecommerce-mvp"
+  },
+  "features": [
+    {
+      "slug": "ecommerce-mvp",
+      "status": "in_progress",
+      "totalLayers": 8,
+      "currentLayer": 0,
+      "completedTasks": ["layer-0/task-01"],
+      "inProgressTask": null
+    }
+  ],
+  "bugs": [],
+  "lastUpdated": "2026-10-06T12:40:00Z"
 }
