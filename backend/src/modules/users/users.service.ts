@@ -34,6 +34,74 @@ export interface CreateUserInput {
   address?: string;
 }
 
+/**
+ * Editable profile fields for `PATCH /users/me`. Kept explicit so the service
+ * only ever writes these keys, regardless of what the controller passes.
+ */
+export interface UpdateProfileInput {
+  fullName?: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface UpdateShopInput {
+  shopName: string;
+  pickupAddress: string;
+}
+
+/** Profile shape returned to clients — never includes credential/token hashes. */
+export interface UserProfile {
+  id: string;
+  email: string;
+  fullName: string;
+  phone: string | null;
+  address: string | null;
+  role: UserRole;
+  shopName: string | null;
+  pickupAddress: string | null;
+}
+
+/** Shop subset returned by `PATCH /users/me/shop`. */
+export interface ShopInfo {
+  shopName: string;
+  pickupAddress: string | null;
+}
+
+/** Maps a user document to the client-facing profile contract. */
+export function toUserProfile(user: UserDocument): UserProfile {
+  return {
+    id: String(user._id),
+    email: user.email,
+    fullName: user.fullName,
+    phone: user.phone ?? null,
+    address: user.address ?? null,
+    role: user.role,
+    shopName: user.shopName ?? null,
+    pickupAddress: user.pickupAddress ?? null,
+  };
+}
+
+/** Maps a user document to the shop info returned after a shop update. */
+export function toShopInfo(user: UserDocument): ShopInfo {
+  return {
+    shopName: user.shopName ?? '',
+    pickupAddress: user.pickupAddress ?? null,
+  };
+}
+
+/**
+ * Keeps only editable profile keys, defence-in-depth against mass assignment.
+ * A runtime `typeof` guard (not just `!== undefined`) drops `null` too, so a
+ * direct service call cannot blank a required field even if it bypasses the DTO.
+ */
+function pickProfileFields(input: UpdateProfileInput): Record<string, string> {
+  const update: Record<string, string> = {};
+  if (typeof input.fullName === 'string') update.fullName = input.fullName;
+  if (typeof input.phone === 'string') update.phone = input.phone;
+  if (typeof input.address === 'string') update.address = input.address;
+  return update;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -64,5 +132,38 @@ export class UsersService {
       role: UserRole.CUSTOMER,
       isActive: true,
     });
+  }
+
+  /**
+   * Updates only the editable profile fields. An empty PATCH returns the
+   * current document rather than issuing an empty `$set`, which MongoDB rejects.
+   */
+  async updateProfile(
+    id: string,
+    input: UpdateProfileInput,
+  ): Promise<UserDocument | null> {
+    const update = pickProfileFields(input);
+    if (Object.keys(update).length === 0) {
+      return this.findById(id);
+    }
+    return this.userModel
+      .findByIdAndUpdate(id, { $set: update }, { new: true })
+      .exec();
+  }
+
+  /** Sets the shop fields, which is what lets the account sell (BR-USR-002). */
+  updateShop(id: string, input: UpdateShopInput): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            shopName: input.shopName,
+            pickupAddress: input.pickupAddress,
+          },
+        },
+        { new: true },
+      )
+      .exec();
   }
 }

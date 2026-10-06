@@ -54,6 +54,14 @@ export class User {
 
   @Prop({ trim: true })
   pickupAddress?: string;
+
+  /**
+   * Populated by Mongoose `timestamps: true` (base schema options). `joinedAt`
+   * in the public shop response is this value. Declared for typing only — no
+   * `@Prop`, so Mongoose still owns the path.
+   */
+  createdAt!: Date;
+  updatedAt!: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

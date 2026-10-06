@@ -80,8 +80,10 @@ backend/src/
 ├── config/                 # database / jwt / cloudinary config
 └── modules/
     ├── auth/               # register/login/refresh/logout + strategies
-    ├── users/              # /users/me, /users/me/shop + user schema
-    ├── shops/              # GET /shops/:sellerId (dùng UsersService + ProductsService)
+    ├── users/              # /users/me, /users/me/shop + user schema;
+    │                      # GET /shops/:sellerId (ShopsController/ShopsService
+    │                      # nằm trong module users; productCount đếm qua raw
+    │                      # collection products)
     ├── categories/         # CRUD + validate no-delete
     ├── products/           # CRUD, search/filter, ownership
     ├── cart/               # cart CRUD, group by seller
