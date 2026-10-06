@@ -1,4 +1,4 @@
-import { getModelToken } from '@nestjs/mongoose';
+import { getConnectionToken, getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { Product, ProductDocument } from '../product.schema';
 import { ProductsService } from '../products.service';
@@ -49,13 +49,34 @@ export function createModelMock(): ModelMock {
   };
 }
 
+/**
+ * Connection double for the `categories`/`users` ref lookups. Resolves every
+ * `findOne` to the supplied refs (default: missing, i.e. `null`).
+ */
+export function createConnectionMock(refs?: {
+  category?: { _id: string; name: string } | null;
+  seller?: { _id: string; shopName?: string } | null;
+}): { collection: jest.Mock } {
+  const documents: Record<string, unknown> = {
+    categories: refs?.category ?? null,
+    users: refs?.seller ?? null,
+  };
+  return {
+    collection: jest.fn((name: string) => ({
+      findOne: jest.fn().mockResolvedValue(documents[name] ?? null),
+    })),
+  };
+}
+
 export async function createService(
   model: ModelMock,
+  connection: { collection: jest.Mock } = createConnectionMock(),
 ): Promise<ProductsService> {
   const moduleRef = await Test.createTestingModule({
     providers: [
       ProductsService,
       { provide: getModelToken(Product.name), useValue: model },
+      { provide: getConnectionToken(), useValue: connection },
     ],
   }).compile();
 

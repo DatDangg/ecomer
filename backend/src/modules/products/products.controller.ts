@@ -11,6 +11,7 @@ import { QueryProductDto } from './dto/query-product.dto';
 import {
   PRODUCT_NOT_FOUND_MESSAGE,
   ProductsService,
+  ProductDetailView,
   ProductView,
 } from './products.service';
 
@@ -31,7 +32,7 @@ export class ProductsController {
 
   @Public()
   @Get(':id')
-  async getOne(@Param('id') id: string): Promise<ProductView> {
+  async getOne(@Param('id') id: string): Promise<ProductDetailView> {
     const product = await this.productsService.findPublicById(id);
     if (!product) {
       throw new NotFoundException(PRODUCT_NOT_FOUND_MESSAGE);

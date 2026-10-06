@@ -13,8 +13,8 @@ interface ProductItem {
   id: string;
   slug: string;
   price: number;
+  stock: number;
   isActive: boolean;
-  isBlocked: boolean;
 }
 
 function slugsOf(body: { data: { items: ProductItem[] } }): string[] {
@@ -56,6 +56,18 @@ describe('Product API (HTTP)', () => {
       expect(response.body.data.items[0]).toMatchObject({
         id: visible._id,
         slug: 'iphone-15-pro',
+      });
+    });
+
+    it('keeps zero-stock products listed for the out-of-stock badge (R-05)', async () => {
+      harness.fixture.seedProduct({ slug: 'sold-out', stock: 0 });
+
+      const response = await harness.http().get('/api/v1/products').expect(200);
+
+      expect(response.body.data.total).toBe(1);
+      expect(response.body.data.items[0]).toMatchObject({
+        slug: 'sold-out',
+        stock: 0,
       });
     });
 
@@ -179,10 +191,14 @@ describe('Product API (HTTP)', () => {
   });
 
   describe('GET /products/:id (public)', () => {
-    it('returns a visible product by id', async () => {
+    it('returns a visible product with nested category and seller', async () => {
+      const category = harness.fixture.seedCategory({ name: 'Điện thoại' });
+      const seller = harness.fixture.seedSeller({ shopName: 'Shop của A' });
       const product = harness.fixture.seedProduct({
         name: 'iPhone 15 Pro',
         slug: 'iphone-15-pro',
+        categoryId: category._id,
+        sellerId: seller._id,
       });
 
       const response = await harness
@@ -194,7 +210,25 @@ describe('Product API (HTTP)', () => {
         id: product._id,
         slug: 'iphone-15-pro',
         isActive: true,
-        isBlocked: false,
+        category: { id: category._id, name: 'Điện thoại' },
+        seller: { id: seller._id, shopName: 'Shop của A' },
+      });
+      expect(response.body.data).not.toHaveProperty('isBlocked');
+      expect(response.body.data).not.toHaveProperty('blockReason');
+    });
+
+    it('degrades safely when the category or seller ref is missing', async () => {
+      const product = harness.fixture.seedProduct({ slug: 'orphan' });
+
+      const response = await harness
+        .http()
+        .get(`/api/v1/products/${product._id}`)
+        .expect(200);
+
+      expect(response.body.data.category).toBeNull();
+      expect(response.body.data.seller).toMatchObject({
+        id: product.sellerId,
+        shopName: null,
       });
     });
 

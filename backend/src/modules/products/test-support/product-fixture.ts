@@ -19,6 +19,16 @@ export interface StoredProduct {
 
 type ProductFilter = Record<string, unknown>;
 
+export interface StoredCategory {
+  _id: string;
+  name: string;
+}
+
+export interface StoredSeller {
+  _id: string;
+  shopName?: string;
+}
+
 function createIdGenerator(): () => string {
   let sequence = 0x200;
   return () => (sequence += 1).toString(16).padStart(24, '0');
@@ -111,6 +121,8 @@ export function createSingleQuery<T>(value: T) {
 export function createProductFixture() {
   const nextId = createIdGenerator();
   const products: StoredProduct[] = [];
+  const categories: StoredCategory[] = [];
+  const sellers: StoredSeller[] = [];
 
   const seedProduct = (
     overrides: Partial<StoredProduct> = {},
@@ -135,6 +147,24 @@ export function createProductFixture() {
     return product;
   };
 
+  const seedCategory = (
+    overrides: Partial<StoredCategory> = {},
+  ): StoredCategory => {
+    const category: StoredCategory = {
+      _id: nextId(),
+      name: `Category ${categories.length + 1}`,
+      ...overrides,
+    };
+    categories.push(category);
+    return category;
+  };
+
+  const seedSeller = (overrides: Partial<StoredSeller> = {}): StoredSeller => {
+    const seller: StoredSeller = { _id: nextId(), ...overrides };
+    sellers.push(seller);
+    return seller;
+  };
+
   const productModel = {
     find: (filter: ProductFilter) =>
       createFindQuery(products.filter((item) => matchesFilter(item, filter))),
@@ -148,10 +178,34 @@ export function createProductFixture() {
       ),
   };
 
+  /** Raw connection double for the `categories`/`users` ref lookups (task-05). */
+  const connection = {
+    collection: (name: string) => {
+      if (name === 'categories') {
+        return {
+          findOne: async (filter: { _id: string }) =>
+            categories.find((item) => item._id === filter._id) ?? null,
+        };
+      }
+      if (name === 'users') {
+        return {
+          findOne: async (filter: { _id: string }) =>
+            sellers.find((item) => item._id === filter._id) ?? null,
+        };
+      }
+      throw new Error(`Unexpected collection requested: ${name}`);
+    },
+  };
+
   return {
     products,
+    categories,
+    sellers,
     seedProduct,
+    seedCategory,
+    seedSeller,
     productModel,
+    connection,
     findProduct: (id: string) => products.find((item) => item._id === id),
   };
 }

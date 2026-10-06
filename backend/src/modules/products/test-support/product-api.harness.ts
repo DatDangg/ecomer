@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { getModelToken } from '@nestjs/mongoose';
+import { getConnectionToken, getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import request from 'supertest';
@@ -26,6 +26,7 @@ async function createApp(fixture: ProductFixture): Promise<INestApplication> {
         provide: getModelToken(Product.name),
         useValue: fixture.productModel,
       },
+      { provide: getConnectionToken(), useValue: fixture.connection },
       { provide: APP_GUARD, useClass: ThrottlerGuard },
       { provide: APP_GUARD, useClass: JwtAuthGuard },
     ],
