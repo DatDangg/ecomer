@@ -57,3 +57,6 @@ Hoàn thiện `AuthModule`: `POST /auth/register` (email + password bcrypt, emai
 - Refresh token = hash SHA-256, không lưu plaintext.
 - `role` không nhận từ body (public register luôn customer).
 - Nguồn: `SPECIFICATIONS.md` R-01 · `docs/PERMISSION.md`.
+
+## Close-out Status (primary reconcile)
+- Reviewer: PASS (STRICT round 4) · Commit: `b985bbf` · Date: 2026-10-06

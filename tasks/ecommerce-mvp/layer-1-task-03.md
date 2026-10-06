@@ -47,3 +47,6 @@ Admin CRUD: `POST /categories`, `PATCH /categories/:id`, `DELETE /categories/:id
 - Kiểm tra "còn SP" đếm qua `@InjectConnection()` collection `products` để **không phụ thuộc Product module (Layer 2)**.
 - Category là collection dùng chung; hiển thị public chỉ active.
 - Nguồn: `SPECIFICATIONS.md` R-03 · `docs/API_SPEC.md`.
+
+## Close-out Status (primary reconcile)
+- Reviewer: PASS (STRICT round 2, after fix round 1) · Commit: `fa42d5e` · Date: 2026-10-06

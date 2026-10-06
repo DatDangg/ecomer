@@ -47,3 +47,6 @@ Chưa có shop → không đăng bán được (403 được enforce ở Product
 - `productCount` ở layer này đếm qua `@InjectConnection()` collection `products` để **không phụ thuộc Product module (Layer 2)**; khi Product module có, có thể refactor.
 - Snapshot `sellerShopName` vào order sẽ lấy từ đây ở Layer 3/4.
 - Nguồn: `SPECIFICATIONS.md` R-02 · `docs/USER_FLOW.md`.
+
+## Close-out Status (primary reconcile)
+- Reviewer: PASS (STRICT round 2, after fix round 1) · Commit: `193c668` · Date: 2026-10-06

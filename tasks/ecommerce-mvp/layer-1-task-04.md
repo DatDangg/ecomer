@@ -83,3 +83,6 @@ SP ẩn, cart/order.
 - Ảnh mẫu là URL public hợp lệ (không phải Cloudinary của app) — chấp nhận trong scope rút gọn vì chưa có upload/validate ảnh (R-13 deferred).
 - Task lớn hơn 1–3 file vì schema/service/controller/DTO/seed gắn chặt một domain; chấp nhận.
 - Nguồn: `SPECIFICATIONS.md` R-05 (public browse) + R-04 (schema fields/index) · `docs/API_SPEC.md` · `docs/ERD.md`.
+
+## Close-out Status (primary reconcile)
+- Reviewer: PASS (STRICT round 2, after fix round 1) · Commit: `6f2e530` · Date: 2026-10-06

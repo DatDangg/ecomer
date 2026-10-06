@@ -49,3 +49,7 @@ Fix gap do spec-validator phase review Layer 1 round 1 (`.context/review-reports
 ## Notes
 - Dùng `@InjectConnection()` collection `categories` + `users` (như task-02/03 đếm qua collection) để tránh phụ thuộc module; hoặc inject service nếu sạch hơn.
 - Nguồn: spec-validator phase review round 1 + `project-ecommerce/06-api-contract.md:269-288`.
+
+## Close-out Status (primary reconcile)
+- Reviewer: PASS (STRICT round 1) · Commit: `3c25ca9` · Date: 2026-10-06
+- Layer 1 phase review: PASS (spec-validator round 2)

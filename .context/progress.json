@@ -9,11 +9,11 @@
       "slug": "ecommerce-mvp",
       "status": "in_progress",
       "totalLayers": 3,
-      "currentLayer": 1,
+      "currentLayer": 2,
       "completedTasks": ["layer-0/task-01", "layer-0/task-02", "layer-0/task-03", "layer-0/task-04", "layer-0/task-05", "layer-0/task-06", "layer-1/task-01", "layer-1/task-02", "layer-1/task-03", "layer-1/task-04", "layer-1/task-05"],
       "inProgressTask": null
     }
   ],
   "bugs": [],
-  "lastUpdated": "2026-10-06T20:50:00Z"
+  "lastUpdated": "2026-10-06T21:10:00Z"
 }
