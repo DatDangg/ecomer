@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -22,8 +23,18 @@ const admin: AuthUser = {
 };
 
 function renderRoute(path: string) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, staleTime: 0 },
+      mutations: { retry: false },
+    },
+  });
   const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
-  render(<RouterProvider router={router} />);
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
 }
 
 describe("SellerRoute", () => {

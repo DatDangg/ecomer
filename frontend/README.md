@@ -63,9 +63,21 @@ Nguồn token: `../skills/react-nodejs/design-tokens.md`.
 
 - Public: `/`, `/products`, `/products/:id`, `/login`, `/register`.
 - Account (cần đăng nhập): `/cart`, `/checkout`, `/orders`, `/profile`.
-- Seller (cần đăng nhập): `/seller`, `/seller/products`, `/seller/orders`, `/seller/setup`.
+- Seller (cần đăng nhập): `/seller`, `/seller/products`, `/seller/orders`.
 - Admin (cần role admin): `/admin`, `/admin/users`, `/admin/products`, `/admin/categories`, `/admin/orders`.
 - 404: mọi path không khớp.
 
-Các page hiện là skeleton; màn hình thật nằm ở layer sau. `auth.store.ts` là placeholder để guard
-chạy được trong layer 0, sẽ được thay ở task-06 (axios + refresh + persist session).
+## Auth & profile flow
+
+- `/login` (`POST /auth/login`) lưu `{ user, accessToken, refreshToken }` vào `auth.store`, rồi chuyển
+  tới `location.state.from` nếu là path nội bộ hợp lệ, mặc định `/products` (`resolveSafeRedirect`).
+- `/register` (`POST /auth/register`) không tạo session; thành công → `/login` kèm email đã đăng ký.
+- `/profile` prefill từ `GET /users/me`, `PATCH /users/me` chỉ gửi `fullName`/`phone`/`address`;
+  lỗi giữ nguyên giá trị đã nhập.
+- Email được `trim()` trước khi gửi login/register. Lỗi transport (không có response) hiển thị copy
+  tiếng Việt; lỗi validate từ server vẫn gắn inline theo field.
+- Route guard (`PrivateRoute`) và interceptor 401 refresh/clear session nằm ở `router/guards.tsx` +
+  `lib/api-client.ts`, không lặp lại trong page.
+
+`pages/` vẫn còn `PlaceholderPage` cho các màn hình chưa build; `auth.store.ts` là nguồn session duy nhất
+(đã persist), token không lưu ở nơi khác.

@@ -4,6 +4,9 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { CustomerLayout } from "@/layouts/CustomerLayout";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { SellerLayout } from "@/layouts/SellerLayout";
+import { ProfilePage } from "@/pages/account/ProfilePage";
+import { LoginPage } from "@/pages/auth/LoginPage";
+import { RegisterPage } from "@/pages/auth/RegisterPage";
 import { NotFoundPage, PlaceholderPage } from "@/pages/PlaceholderPage";
 import { AdminRoute, PrivateRoute, SellerRoute } from "@/router/guards";
 
@@ -14,8 +17,8 @@ export const appRoutes: RouteObject[] = [
       { path: "/", element: <PlaceholderPage title="Trang chủ" /> },
       { path: "/products", element: <PlaceholderPage title="Sản phẩm" /> },
       { path: "/products/:id", element: <PlaceholderPage title="Chi tiết sản phẩm" /> },
-      { path: "/login", element: <PlaceholderPage title="Đăng nhập" /> },
-      { path: "/register", element: <PlaceholderPage title="Đăng ký" /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
@@ -28,7 +31,7 @@ export const appRoutes: RouteObject[] = [
           { path: "/cart", element: <PlaceholderPage title="Giỏ hàng" /> },
           { path: "/checkout", element: <PlaceholderPage title="Thanh toán" /> },
           { path: "/orders", element: <PlaceholderPage title="Đơn mua" /> },
-          { path: "/profile", element: <PlaceholderPage title="Hồ sơ cá nhân" /> },
+          { path: "/profile", element: <ProfilePage /> },
         ],
       },
     ],
@@ -42,7 +45,6 @@ export const appRoutes: RouteObject[] = [
           { path: "/seller", element: <PlaceholderPage title="Tổng quan người bán" /> },
           { path: "/seller/products", element: <PlaceholderPage title="Sản phẩm của tôi" /> },
           { path: "/seller/orders", element: <PlaceholderPage title="Đơn bán" /> },
-          { path: "/seller/setup", element: <PlaceholderPage title="Thiết lập gian hàng" /> },
         ],
       },
     ],

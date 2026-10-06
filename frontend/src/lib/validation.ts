@@ -37,3 +37,9 @@ export function toFieldErrorsFromApi(errors: ApiError["errors"]): FieldErrors {
 
   return fieldErrors;
 }
+
+/** Field lỗi đầu tiên theo thứ tự hiển thị — dùng để focus field không hợp lệ. */
+export function firstInvalidField(errors: object, order: readonly string[]): string | undefined {
+  const record = errors as Record<string, unknown>;
+  return order.find((field) => Boolean(record[field]));
+}

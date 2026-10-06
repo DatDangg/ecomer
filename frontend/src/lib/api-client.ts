@@ -195,6 +195,18 @@ function readFieldErrors(value: unknown): ApiFieldError[] | undefined {
   return fieldErrors.length > 0 ? fieldErrors : undefined;
 }
 
+/** Vietnamese fallback for transport failures that never reached the server. */
+export const NETWORK_ERROR_MESSAGE = "Không thể kết nối máy chủ. Vui lòng thử lại.";
+
+function readApiErrorMessage(error: AxiosError): string {
+  const body = error.response?.data;
+  if (isRecord(body) && typeof body.message === "string") {
+    return body.message;
+  }
+  // No response = offline/timeout/aborted; avoid surfacing Axios' raw "Network Error".
+  return error.response ? error.message : NETWORK_ERROR_MESSAGE;
+}
+
 function toApiRequestError(error: unknown): ApiRequestError {
   if (error instanceof ApiRequestError) {
     return error;
@@ -202,9 +214,11 @@ function toApiRequestError(error: unknown): ApiRequestError {
 
   if (axios.isAxiosError(error)) {
     const body = error.response?.data;
-    const message = isRecord(body) && typeof body.message === "string" ? body.message : error.message;
     const errors = isRecord(body) ? readFieldErrors(body.errors) : undefined;
-    return new ApiRequestError(message, { status: error.response?.status, errors });
+    return new ApiRequestError(readApiErrorMessage(error), {
+      status: error.response?.status,
+      errors,
+    });
   }
 
   if (error instanceof Error) {
