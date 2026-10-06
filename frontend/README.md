@@ -28,13 +28,26 @@ src/
 ├── components/
 │   ├── ui/             # shadcn primitives đã token hóa (button, input, card, badge, dialog, sheet)
 │   └── shared/         # SiteHeader, SiteFooter, SidebarLayout
-├── stores/auth.store.ts  # placeholder session store (task-06 hoàn thiện)
-├── lib/                # cn helper, i18n
+├── stores/auth.store.ts  # zustand session (persist + access/refresh token)
+├── lib/                # cn, i18n, axios client, query client, toast, validation
+├── types/api.ts        # ApiResponse<T> / Paginated<T> / ApiError (contract)
 ├── locales/vi.json     # copy tiếng Việt
 ├── pages/              # PlaceholderPage + NotFoundPage (skeleton)
 ├── utils/format.ts     # formatVnd / formatNumber (vi-VN)
 └── test/setup.ts       # Vitest + Testing Library
 ```
+
+## Data layer
+
+- `lib/api-client.ts` — axios instance `baseURL = VITE_API_URL` (đã gồm `/api/v1`).
+  Request interceptor gắn `Authorization: Bearer <accessToken>`; response interceptor 401 →
+  gọi `POST /auth/refresh` **một lần** (single-flight, gộp nhiều 401) → retry request gốc;
+  refresh fail → clear session + điều hướng `/login`. Dùng helper `apiGet/apiPost/apiPatch/apiDelete`
+  để nhận thẳng `data` đã bỏ envelope; lỗi ném ra `ApiRequestError` (có `status`, `errors`).
+- `lib/query-client.ts` — `QueryClient` (staleTime 60s, không retry 4xx, retry 5xx/mạng tối đa 2 lần).
+  Provider mount ở `App`.
+- `lib/toast.ts` — cấu hình `react-toastify` + `notifySuccess/notifyError`.
+- `lib/validation.ts` — map lỗi Yup / envelope API sang `field -> message` cho Formik.
 
 ## Design tokens
 

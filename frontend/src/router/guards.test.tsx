@@ -7,16 +7,18 @@ import { useAuthStore, type AuthUser } from "@/stores/auth.store";
 
 const customer: AuthUser = {
   id: "customer-1",
-  name: "Người mua",
   email: "buyer@example.com",
+  fullName: "Người mua",
   role: "customer",
+  shopName: "Gian hàng của Người mua",
 };
 
 const admin: AuthUser = {
   id: "admin-1",
-  name: "Quản trị viên",
   email: "admin@example.com",
+  fullName: "Quản trị viên",
   role: "admin",
+  shopName: null,
 };
 
 function renderRoute(path: string) {
