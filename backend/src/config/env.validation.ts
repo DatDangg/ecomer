@@ -2,7 +2,9 @@ import { plainToInstance, Type } from 'class-transformer';
 import {
   IsEnum,
   IsInt,
+  IsNotEmpty,
   IsOptional,
+  IsString,
   IsUrl,
   Max,
   Min,
@@ -30,6 +32,11 @@ export class EnvironmentVariables {
   @IsUrl({ require_tld: false })
   @IsOptional()
   FRONTEND_URL: string = 'http://localhost:5173';
+
+  /** Required: the API must fail fast without a MongoDB replica-set URI. */
+  @IsString()
+  @IsNotEmpty()
+  MONGODB_URI!: string;
 }
 
 /**
