@@ -4,12 +4,13 @@
 
 ```yaml
 workItem: feature/ecommerce-mvp
-phaseTask: layer-2-task-01
-step: builder
+phaseTask: initial-build-handoff
+step: spec-publisher
 status: running
 interrupted: false
-updatedAt: 2026-10-06T21:15:00+07:00
+updatedAt: 2026-10-07T02:20:00+07:00
 attempt: 0
+batch: "L2-01 ✅ → L2-02 ✅ → L2 phase-review PASS ✅ → L3-01 smoke test"
 batch: "run-through to basic flow (user approved): L1-03 ✅ → L1-04 ✅ → L1-05 ✅ → phase-review PASS ✅ → L2-01 → L2-02 → L3-01"
 filesTouched:
   - backend/src/app.module.ts

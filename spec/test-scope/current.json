@@ -1,25 +1,62 @@
 {
   "specVersion": "1.0.0",
-  "scopeVersion": 1,
-  "generatedAt": "2026-10-06T00:00:00+07:00",
+  "scopeVersion": 2,
+  "generatedAt": "2026-10-07T02:25:00+07:00",
   "trigger": "initial-build",
-  "workItem": "docs-first-bootstrap",
-  "specRefs": ["R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08", "R-09", "R-10", "R-11", "R-12", "R-13"],
+  "workItem": "feature/ecommerce-mvp",
+  "specRefs": ["R-01", "R-02", "R-03", "R-04", "R-05"],
+  "scopeNote": "Bản gọn 3 layer cho luồng cơ bản: auth + duyệt sản phẩm. R-04 chỉ phần schema Product + public browse; seller CRUD/upload/cart/order/payment/admin/deploy deferred (qua /change).",
   "changed": {
-    "files": ["SPECIFICATIONS.md"],
-    "modules": ["auth", "users", "shops", "categories", "products", "cart", "orders", "payments", "admin", "upload"]
+    "files": [
+      "backend/src/modules/auth/*",
+      "backend/src/modules/users/*",
+      "backend/src/modules/categories/*",
+      "backend/src/modules/products/*",
+      "backend/src/database/seed/sample-seed.*",
+      "backend/src/smoke/basic-flow.smoke.spec.ts",
+      "frontend/src/pages/auth/*",
+      "frontend/src/pages/account/ProfilePage.tsx",
+      "frontend/src/pages/products/*",
+      "frontend/src/components/product/*",
+      "frontend/src/api/*"
+    ],
+    "modules": ["auth", "users", "shops", "categories", "products", "sample-seed", "fe-auth", "fe-profile", "fe-products", "smoke"]
   },
   "impact": {
-    "direct": ["auth", "users", "shops", "categories", "products", "cart", "orders", "payments", "admin", "upload"],
+    "direct": [
+      "auth.register",
+      "auth.login",
+      "auth.refresh",
+      "auth.logout",
+      "users.me",
+      "shops.public",
+      "categories.public",
+      "categories.admin-crud",
+      "products.public-list",
+      "products.public-detail",
+      "fe.login",
+      "fe.register",
+      "fe.profile",
+      "fe.product-list",
+      "fe.product-detail",
+      "smoke.basic-flow"
+    ],
     "dependents": [],
-    "regression": []
+    "regression": [
+      "auth.register",
+      "auth.login",
+      "products.public-list",
+      "products.public-detail"
+    ]
   },
   "acceptance": [
-    "Happy path E2E PASS: đăng ký 2 user → seller thiết lập shop & đăng bán → buyer thêm giỏ 2 shop → checkout → VNPay sandbox → seller giao hàng (KPI-01)",
-    "100% Acceptance Criteria Sprint 1 + Sprint 2 Must-Have đạt (KPI-02)",
-    "Không còn lỗi Blocker/Critical trước demo; Playwright smoke test pass trên URL production (KPI-03)",
-    "Go-live trong 1 tuần (Sprint 0 → 3) (KPI-04)",
-    "[cần xác nhận] các mục trạng thái [x] trên PRODUCT_BACKLOG_ROADMAP chưa có source để verify"
+    "Automated smoke PASS: register 201 (không lộ password) → login 200 (user+access+refresh) → GET /products 200 (chỉ isActive && !isBlocked) → GET /products/:id 200; ẩn/blocked/không tồn tại → 404",
+    "Auth: email trùng 409, sai password 401, tài khoản khóa 403 'Tài khoản đã bị khóa', refresh/logout + throttle /auth/*",
+    "Category: admin CRUD (403 non-admin), public chỉ active, trùng tên 409, xóa còn SP 400",
+    "Product public: filter search/categoryId/sellerId/minPrice/maxPrice, sort {price|createdAt|name}×{asc|desc}, phân trang limit ≤100, envelope {items,total,page,limit,totalPages}",
+    "FE: login/register/profile prefill+PATCH; product list/detail filter/sort/pagination đồng bộ URL; stock=0 nhãn 'Hết hàng'",
+    "Build: backend `npm run build` PASS (dist); frontend `pnpm run build` PASS (dist)",
+    "Deferred (không test trong scope này): seller CRUD, upload Cloudinary, cart, order/checkout/VNPay, admin moderation, deploy"
   ],
-  "risk": "high"
+  "risk": "medium"
 }

@@ -5,3 +5,4 @@
 | Version | Ngày | Loại | Thay đổi | Scope sinh |
 |---|---|---|---|---|
 | 1.0.0 | 2026-10-06 | MINOR | Spec khởi tạo (docs-first) — R-01..R-12 | scope v1 |
+| 1.0.0 | 2026-10-07 | — | Không đổi requirement; phát hành scope initial build MVP cơ bản (auth + duyệt sản phẩm) | scope v2 |

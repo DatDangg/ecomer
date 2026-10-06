@@ -1,0 +1,25 @@
+{
+  "specVersion": "1.0.0",
+  "scopeVersion": 1,
+  "generatedAt": "2026-10-06T00:00:00+07:00",
+  "trigger": "initial-build",
+  "workItem": "docs-first-bootstrap",
+  "specRefs": ["R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08", "R-09", "R-10", "R-11", "R-12", "R-13"],
+  "changed": {
+    "files": ["SPECIFICATIONS.md"],
+    "modules": ["auth", "users", "shops", "categories", "products", "cart", "orders", "payments", "admin", "upload"]
+  },
+  "impact": {
+    "direct": ["auth", "users", "shops", "categories", "products", "cart", "orders", "payments", "admin", "upload"],
+    "dependents": [],
+    "regression": []
+  },
+  "acceptance": [
+    "Happy path E2E PASS: đăng ký 2 user → seller thiết lập shop & đăng bán → buyer thêm giỏ 2 shop → checkout → VNPay sandbox → seller giao hàng (KPI-01)",
+    "100% Acceptance Criteria Sprint 1 + Sprint 2 Must-Have đạt (KPI-02)",
+    "Không còn lỗi Blocker/Critical trước demo; Playwright smoke test pass trên URL production (KPI-03)",
+    "Go-live trong 1 tuần (Sprint 0 → 3) (KPI-04)",
+    "[cần xác nhận] các mục trạng thái [x] trên PRODUCT_BACKLOG_ROADMAP chưa có source để verify"
+  ],
+  "risk": "high"
+}
