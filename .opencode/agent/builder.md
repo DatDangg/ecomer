@@ -3,7 +3,7 @@ description: Builder mặc định — implement code + test cho 1 task (feature
 mode: subagent
 # model set ở /brainstorm (project-config.md models:) → models.builder.
 # Để comment = kế thừa model chính (an toàn trước khi cấu hình).
-# model: <provider>/<model-code-chinh>
+model: opencode-go/deepseek-v4.1-flash
 temperature: 0.1
 steps: 40
 permission:

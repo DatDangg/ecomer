@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Layer Plan — Ecommerce MVP</title>
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f5f5f5; --border: #e5e5e5;
+    --text: #000000; --muted: #52525b; --primary: #000000;
+    --success: #067647; --warning: #854d0e; --error: #b42318;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0a0a0a; --surface:#171717; --border:#2e2e2e; --text:#fafafa; --muted:#a1a1aa; --primary:#fafafa; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.5; }
+  header { padding:32px 24px 8px; max-width:1100px; margin:0 auto; }
+  h1 { font-size:1.75rem; margin:0 0 4px; font-weight:600; }
+  .sub { color:var(--muted); margin:0; }
+  main { max-width:1100px; margin:0 auto; padding:16px 24px 48px; }
+  .layer { border:1px solid var(--border); border-radius:12px; padding:16px 20px; margin:16px 0; background:var(--surface); }
+  .layer-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .badge { display:inline-block; background:var(--primary); color:var(--bg); border-radius:9999px;
+    padding:2px 12px; font-size:.8rem; font-weight:600; }
+  .layer h2 { font-size:1.1rem; margin:0; font-weight:600; }
+  .layer .meta { color:var(--muted); font-size:.85rem; }
+  ul.tasks { list-style:none; padding:0; margin:12px 0 0; display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px; }
+  ul.tasks li { border:1px solid var(--border); border-radius:8px; padding:8px 12px; background:var(--bg);
+    font-size:.88rem; }
+  ul.tasks li b { font-weight:600; }
+  .deps { color:var(--muted); font-size:.85rem; margin-top:10px; }
+  .checkpoint { display:flex; align-items:center; gap:10px; margin:8px 0 8px 8px;
+    color:var(--warning); font-size:.9rem; font-weight:600; }
+  .arrow { color:var(--muted); text-align:center; font-size:1.2rem; }
+  footer { max-width:1100px; margin:0 auto; padding:0 24px 40px; color:var(--muted); font-size:.85rem; }
+  .note { border-left:3px solid var(--error); padding-left:12px; margin-top:16px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Layer Plan — Ecommerce MVP</h1>
+  <p class="sub">Monorepo: <code>backend/</code> (NestJS + Mongoose, npm) · <code>frontend/</code> (React 18 + Vite + TS + Tailwind + shadcn/ui, pnpm) · MongoDB replica set</p>
+  <p class="sub">8 layers · 28 tasks · slug <code>ecommerce-mvp</code></p>
+</header>
+<main>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 0</span><h2>Scaffold &amp; hạ tầng</h2><span class="meta">6 tasks</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Backend bootstrap &amp; config</li>
+      <li><b>02</b> Backend DB + API contract foundation</li>
+      <li><b>03</b> Repo &amp; ops foundation (env/README/replica set)</li>
+      <li><b>04</b> Backend identity foundation (User/JWT/guards/seed)</li>
+      <li><b>05</b> Frontend scaffold (Vite/Tailwind/shadcn/tokens/shells)</li>
+      <li><b>06</b> Frontend data layer (axios/Query/Zustand/types)</li>
+    </ul>
+    <p class="deps">Deps nội bộ (scaffold greenfield): 02→01, 04→02; 05 độc lập; 06→05. Từ Layer 1 trở đi các task trong layer KHÔNG phụ thuộc nhau.</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 0</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 1</span><h2>Auth · User/Shop · Category</h2><span class="meta">3 tasks · R-01, R-02, R-03</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Auth API (register/login/refresh/logout)</li>
+      <li><b>02</b> User profile &amp; Shop API</li>
+      <li><b>03</b> Category API (admin CRUD + public)</li>
+    </ul>
+    <p class="deps">Deps: Layer 0 task-04 (identity) / task-02 (contract).</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 1</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 2</span><h2>Product &amp; Upload</h2><span class="meta">2 tasks · R-04, R-05, R-13</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Upload module (Cloudinary)</li>
+      <li><b>02</b> Product module (seller CRUD + public browse)</li>
+    </ul>
+    <p class="deps">Deps: Layer 1 task-02 (shop) + task-03 (category).</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 2</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 3</span><h2>Commerce foundation</h2><span class="meta">3 tasks · R-06 + model lõi R-07/R-08</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Cart module (login-only)</li>
+      <li><b>02</b> Order/Checkout/Payment schemas + OrderService core</li>
+      <li><b>03</b> VNPay signing foundation</li>
+    </ul>
+    <p class="deps">Deps: Layer 2 task-02. Tách model lõi khỏi HTTP để Layer 4 không phụ thuộc trong cùng layer.</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 3</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 4</span><h2>Checkout · Order management · Fulfillment · VNPay</h2><span class="meta">4 tasks · R-07, R-08, R-09, R-10</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Checkout / create order transaction</li>
+      <li><b>02</b> Order read APIs (customer/seller/admin)</li>
+      <li><b>03</b> Order status transitions (fulfillment + refund)</li>
+      <li><b>04</b> VNPay Return/IPN idempotent + cron expire</li>
+    </ul>
+    <p class="deps">Deps: Layer 3 (cart + order models + vnpay service). Các task độc lập nhau.</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 4</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 5</span><h2>Admin management APIs</h2><span class="meta">2 tasks · R-11</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Admin user management (ban/unban + cascade block)</li>
+      <li><b>02</b> Admin product moderation (block/unblock)</li>
+    </ul>
+    <p class="deps">Deps: Layer 0 task-04 + Layer 2 task-02.</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 5</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 6</span><h2>Frontend screens &amp; integration</h2><span class="meta">6 tasks · 22 screens</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Public discovery (#5–#8)</li>
+      <li><b>02</b> Auth/profile/seller setup (#1–#4)</li>
+      <li><b>03</b> Cart/checkout/result (#9–#11)</li>
+      <li><b>04</b> Customer orders (#12–#13)</li>
+      <li><b>05</b> Seller screens (#14–#17)</li>
+      <li><b>06</b> Admin screens (#18–#22)</li>
+    </ul>
+    <p class="deps">Deps: Layer 0 task-05/06 + API tương ứng ở Layer 1–5. Các task độc lập nhau.</p>
+  </section>
+  <div class="checkpoint">⏸ HUMAN CHECKPOINT — duyệt Layer 6</div>
+  <div class="arrow">▼</div>
+
+  <section class="layer">
+    <div class="layer-head"><span class="badge">Layer 7</span><h2>Go-Live</h2><span class="meta">2 tasks · R-12</span></div>
+    <ul class="tasks">
+      <li><b>01</b> Deploy BE (Render) + FE (Vercel) + Atlas</li>
+      <li><b>02</b> Security hardening + Playwright smoke + docs reconcile</li>
+    </ul>
+    <p class="deps">Deps: task-01 cần L0–L6; task-02 cần task-01 (prod URL).</p>
+  </section>
+
+  <div class="note">
+    <strong>Diagram note:</strong> Archify CLI không có trong môi trường (<code>command -v archify</code> → not found),
+    nên layer-plan diagram được tạo dưới dạng HTML tĩnh self-contained thay vì archify-generated.
+  </div>
+
+</main>
+<footer>
+  Generated by Graph Agent · slug <code>ecommerce-mvp</code> · 2026-10-06 ·
+  Task files: <code>tasks/ecommerce-mvp/layer-{N}-task-{NN}.md</code>
+</footer>
+</body>
+</html>

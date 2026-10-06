@@ -3,7 +3,7 @@ description: Reviewer độc lập — tìm defect trong code/test của 1 task 
 mode: subagent
 # model set ở /brainstorm (project-config.md models:) → models.reviewer (khác họ builder).
 # Để comment = kế thừa model chính.
-# model: <provider>/<model-khac-ho>
+model: opencode-go/gpt-6-luna
 temperature: 0.1
 steps: 30
 permission:
@@ -13,6 +13,11 @@ permission:
   bash:
     "*": deny
     # verify-commands:start — auto-generated từ .context/project-config.md (scripts/apply-verify-permissions.mjs)
+    "pnpm --dir frontend exec tsc --noEmit": allow
+    "pnpm --dir frontend run lint": allow
+    "npm --prefix backend exec -- tsc --noEmit -p backend/tsconfig.json": allow
+    "npm --prefix backend run lint": allow
+    "npm --prefix backend run test": allow
     # verify-commands:end
     "aislop *": allow
     "npx aislop*": allow

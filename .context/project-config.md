@@ -9,93 +9,89 @@
 ## Config
 
 ```yaml
-project: <tên dự án>
+project: Ecommerce Team Project
 output_language: vi            # vi | en — ngôn ngữ cho docs/summary
 
 # ── Git ──
-target_branch: <target_branch> # default staging-direct: current branch phải là branch này khi commit/push PASS; chưa điền = hỏi user
+target_branch: staging         # current branch phải là branch này khi commit/push PASS
 forbidden_branch: main         # cấm push trực tiếp (opencode.jsonc hard-deny main/ref main)
-branch_pattern: "<target_branch>" # default staging-direct; feature/<slug>|bug/<slug> chỉ khi user yêu cầu feature branch
-auto_push_after_pass: false    # ⚠️ KHÔNG phải "tự commit": commit sau PASS luôn BẮT BUỘC. Flag này chỉ = AUTO-PUSH: true = tự `git push origin <target_branch>` sau PASS; false = chỉ commit local, chờ user yêu cầu rõ.
+branch_pattern: "staging"      # default staging-direct
+auto_push_after_pass: false    # chỉ commit local sau PASS, chờ user yêu cầu push
 
 # ── Package / source ──
-package_manager: <none|pnpm|npm|yarn|bun>  # none/chưa điền = không hardcode lệnh
-source_roots: []               # ví dụ: [src] hoặc [apps, packages]; [] nếu chưa có app code
+package_manager: pnpm          # frontend dùng pnpm; backend dùng npm (xem api_* commands)
+source_roots: [backend, frontend]   # monorepo 2 project độc lập (backend NestJS/npm, frontend React+Vite/pnpm)
 
 # ── Verify commands (null/placeholder = skip, no app configured) ──
-web_typecheck_command: null
-web_lint_command: null
-api_typecheck_command: null
-api_lint_command: null
-test_command: null
+web_typecheck_command: "pnpm --dir frontend exec tsc --noEmit"
+web_lint_command: "pnpm --dir frontend run lint"
+api_typecheck_command: "npm --prefix backend exec -- tsc --noEmit -p backend/tsconfig.json"
+api_lint_command: "npm --prefix backend run lint"
+test_command: "npm --prefix backend run test"
 install_command: null
 lint_command: null          # generic alias if web/api split does not apply
 typecheck_command: null     # generic alias if web/api split does not apply
-build_command: null
+build_command: null         # frontend + backend build riêng; chạy thủ công khi cần
 migration_command: null     # only used when db_tool != none and migration_required: true
 
 # ── Database ──
-db_tool: none                  # none | prisma | drizzle | other
-migration_required: false      # true nếu cần migration versioned (chỉ khi db_tool != none)
-staging_db: <env var staging, vd DATABASE_URL_STAGING>   # TÊN ENV VAR, không phải connection string/secret
-prod_db: <env var production, vd DATABASE_URL_PROD>       # TÊN ENV VAR; phải khác staging_db
+db_tool: other                 # MongoDB + Mongoose ODM (schema-less, không migration versioned)
+migration_required: false      # không có migration versioned
+staging_db: MONGODB_URI_STAGING   # TÊN ENV VAR (dev/local mặc định dùng MONGODB_URI)
+prod_db: MONGODB_URI_PROD         # TÊN ENV VAR; phải khác staging_db
 destructive_migration_policy: HIGH_RISK_MIGRATION
 
 # ── Deploy / CI-CD (từ brainstorm; secret nằm ở .env.local) ──
-deploy_platform: <vercel|railway|docker-vps|skip>
-ci_cd: <github-actions|gitlab-ci|skip>
+deploy_platform: other         # Vercel (FE) + Render (BE) + MongoDB Atlas M0
+ci_cd: skip                    # bài test free tier — không CI/CD
 
 # ── Monitoring ──
 monitor_enabled: false         # true | false
-otel_service_name: <tên service trong telemetry>
-otel_env: <production|staging>
+otel_service_name: ecommerce-api
+otel_env: production
 ```
 
 ### DB / migration
 
-- **`db_tool: none`** → project không dùng DB/ORM: **bỏ qua toàn bộ migration safety rules**.
-- `db_tool != none` **và** `migration_required: true` → áp dụng migration gate:
-  migration phải versioned + committed, không sửa migration đã apply.
-- Không hardcode Prisma/Drizzle: dùng đúng `db_tool` đã khai.
-- Trước commit phải inspect migration artifact theo `db_tool`/`migration_command`. Nếu có `DROP TABLE/COLUMN`,
-  đổi type, `SET NOT NULL`, `UNIQUE/FK` trên data cũ, enum phá hoại, bulk transform/backfill
-  → gắn `HIGH_RISK_MIGRATION`, không promote production, báo destructive op/table/column ảnh hưởng,
-  tương thích data, backfill, rollback, kết quả verify staging.
-- Cấm `db push`, `migrate reset`, seed/reset, clone data giữa staging/prod.
+- **`db_tool: other`** (MongoDB + Mongoose) **&** `migration_required: false` → **bỏ qua migration gate** (schema-less).
+- Không hardcode Prisma/Drizzle: dùng đúng `db_tool` đã khai (Mongoose).
 - `staging_db` phải khác `prod_db`; data độc lập; không sync data staging→prod.
+- Cấm `db push`, `migrate reset`, seed/reset, clone data giữa staging/prod.
 
 ## Check commands (chạy trước khi báo xong)
 
 > Mọi người (builder/reviewer) PHẢI dùng đúng lệnh đã cấu hình ở đây, filter theo package bị đụng nếu monorepo.
 > Nếu command là `null`/placeholder hoặc repo chưa có app code (`source_roots: []`) → ghi `skip, no app configured`.
 > KHÔNG tự suy ra `npm test`, `pnpm lint`, Prisma, package name, hay path `apps/` khi chưa cấu hình.
+> ⚠️ Backend/frontend **chưa scaffold** — các lệnh là đích đến, sẽ verify ở layer 0 (scaffold).
 
 ```yaml
 check_commands:
-  install: null             # alias of install_command
-  web_typecheck: null       # hoặc = web_typecheck_command
-  web_lint: null            # hoặc = web_lint_command
-  api_typecheck: null       # hoặc = api_typecheck_command
-  api_lint: null            # hoặc = api_lint_command
-  test: null                # hoặc = test_command
-  build: null               # hoặc = build_command
-  migration: null           # hoặc = migration_command khi migration_required=true
+  install: null             # backend npm install / frontend pnpm install (chạy riêng)
+  web_typecheck: "pnpm --dir frontend exec tsc --noEmit"
+  web_lint: "pnpm --dir frontend run lint"
+  api_typecheck: "npm --prefix backend exec -- tsc --noEmit -p backend/tsconfig.json"
+  api_lint: "npm --prefix backend run lint"
+  test: "npm --prefix backend run test"
+  build: null               # npm --prefix backend run build; pnpm --dir frontend build (chạy riêng)
+  migration: null           # migration_required=false
   docs_inventory: null
 ```
 
 ## Models per role
 
-> Model KHÔNG đọc từ `.env.local`. Khai ở đây rồi **bỏ comment + copy sang frontmatter** của từng file
-> `.opencode/agent/*.md`, rồi **restart opencode** (config không hot-reload).
-> Quy tắc: **builder ≠ reviewer** (khác họ provider) để lộ blind spot khác nhau.
+> Model KHÔNG đọc từ `.env.local`. Đã copy sang frontmatter của từng file
+> `.opencode/agent/*.md` — cần **restart opencode** (config không hot-reload).
+> ⚠️ builder (DeepSeek) & reviewer (GPT-6 Luna) cùng provider `opencode-go` nhưng khác model family;
+> spec_validator trùng reviewer (theo lựa chọn user).
 
 ```yaml
 models:
-  builder:        <provider>/<model-code-chinh>
-  builder_strong: <provider>/<model-manh-hon>     # chỉ dùng khi user yêu cầu rõ (§7 gate)
-  reviewer:       <provider>/<model-khac-ho>
-  spec_validator: <provider>/<model-ho-thu-3>     # họ thứ 3 nếu có
-  change_request: <provider>/<model-plan>          # ⭐ agent hậu-build (classify/spec/task) — cửa vào /change
+  builder:        opencode-go/deepseek-v4.1-flash
+  builder_strong: opencode-go/deepseek-v4.1-flash   # chỉ dùng khi user yêu cầu rõ (§7 gate)
+  reviewer:       opencode-go/gpt-6-luna
+  spec_validator: opencode-go/gpt-6-luna
+  change_request: opencode-go/deepseek-v4.1-flash
 ```
 
 ## UI rules (nếu project có UI)
@@ -112,5 +108,5 @@ ui:
 ```yaml
 secrets:
   source: env                    # chỉ đọc từ env; KHÔNG hardcode/commit
-  required: [DATABASE_URL, JWT_SECRET]
+  required: [MONGODB_URI, JWT_SECRET, JWT_REFRESH_SECRET, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, VNPAY_TMN_CODE, VNPAY_HASH_SECRET, VNPAY_URL, VNPAY_RETURN_URL, FRONTEND_URL, ADMIN_EMAIL, ADMIN_PASSWORD]
 ```

@@ -3,7 +3,7 @@ description: Builder cho task khó — CHỈ dùng khi user yêu cầu rõ (bị
 mode: subagent
 # model set ở /brainstorm (project-config.md models:) → models.builder_strong.
 # Để comment = kế thừa model chính. CHỈ gọi khi user yêu cầu rõ (xem opencode.jsonc).
-# model: <provider>/<model-manh-hon>
+model: opencode-go/deepseek-v4.1-flash
 temperature: 0.1
 steps: 50
 permission:
