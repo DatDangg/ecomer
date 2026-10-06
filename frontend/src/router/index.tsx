@@ -7,6 +7,8 @@ import { SellerLayout } from "@/layouts/SellerLayout";
 import { ProfilePage } from "@/pages/account/ProfilePage";
 import { LoginPage } from "@/pages/auth/LoginPage";
 import { RegisterPage } from "@/pages/auth/RegisterPage";
+import { ProductDetailPage } from "@/pages/products/ProductDetailPage";
+import { ProductListPage } from "@/pages/products/ProductListPage";
 import { NotFoundPage, PlaceholderPage } from "@/pages/PlaceholderPage";
 import { AdminRoute, PrivateRoute, SellerRoute } from "@/router/guards";
 
@@ -14,9 +16,9 @@ export const appRoutes: RouteObject[] = [
   {
     element: <PublicLayout />,
     children: [
-      { path: "/", element: <PlaceholderPage title="Trang chủ" /> },
-      { path: "/products", element: <PlaceholderPage title="Sản phẩm" /> },
-      { path: "/products/:id", element: <PlaceholderPage title="Chi tiết sản phẩm" /> },
+      { path: "/", element: <ProductListPage /> },
+      { path: "/products", element: <ProductListPage /> },
+      { path: "/products/:id", element: <ProductDetailPage /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "*", element: <NotFoundPage /> },
